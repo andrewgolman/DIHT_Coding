@@ -22,10 +22,7 @@ int main(int argc, const char* argv[]) {
     bool write_log = args_struct.get("-l");
 
     if (show_help) {
-        std::cout << "You know what it does. Command line options are:" << std::endl;
-        std::cout << "-h --help : show this message" << std::endl;
-        std::cout << "-s --silence : be silent" << std::endl;
-        std::cout << "-l --logging : write logs to stderr" << std::endl;
+        std::cout << args_struct.generate_help("You know what it does.");
         return 0;
     }
     std::ostream& verbose_stream(enable_stream(not be_silent));

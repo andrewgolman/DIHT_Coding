@@ -1,5 +1,7 @@
 #include "solve_equation.hpp"
 #include "../test_framework.hpp"
+#include <iostream>
+#include <vector>
 
 TEST(constant_no_roots) {
     assert(solve_quadratic_equation(0., 0., 1.) == std::vector<double>());

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <cmath>
 #include "../utils.hpp"
 
 template <typename Type>
