@@ -49,7 +49,7 @@ std::vector<Type> solve_quadratic_equation(Type a, Type b, Type c) {
     if (compare_to_zero(a) == 0) {
         return solve_linear_equation(b, c);
     }
-    Type discriminant = b * b - 4 * a * c;
+    auto discriminant = b * b - 4 * a * c;
     if (compare_to_zero(discriminant) == 1) {
         Type discriminant_sqrt = sqrt(discriminant);
         Type root_1 = (-b + discriminant_sqrt) / (2 * a);

@@ -7,21 +7,22 @@
 #include <sstream>
 
 enum class ArgParserActions {
-    APA_STORE_TRUE,
-    APA_STORE_FALSE
+    STORE_TRUE,
+    STORE_FALSE
 };
 
 struct BoolArg {
     std::string description;
     bool value;
     std::vector<std::string> names;
+
     BoolArg(const std::string& description_, ArgParserActions action_, const std::vector<std::string>& names_)
-            : names(names_), description(description_) {
-        if (action_ == ArgParserActions::APA_STORE_TRUE) {
+                : names(names_), description(description_) {
+        if (action_ == ArgParserActions::STORE_TRUE) {
             value = 0;
-        } else if (action_ == ArgParserActions::APA_STORE_FALSE) {
+        } else if (action_ == ArgParserActions::STORE_FALSE) {
             value = 1;
-        }
+        }  // exceptions should be thrown from constructors, maybe ArgParserActions should be kept from adding other options
     }
     std::string help() const {
         std::ostringstream ss;
@@ -42,7 +43,7 @@ class ArgParser {
 public:
     void add_arg(const std::vector<std::string>& names, const std::string& description, ArgParserActions action) {
         auto new_arg_ptr = std::make_shared<BoolArg>(description, action, names);
-        for (auto name: names) {
+        for (auto& name : names) {
             names_map[name] = new_arg_ptr;
         }
     }
