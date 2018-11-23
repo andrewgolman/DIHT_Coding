@@ -9,7 +9,7 @@
 
 
 int main(int argc, const char* argv[]) {
-    auto args_struct = ArgParser();
+    auto args_struct = ArgParser();  // todo constructor of init list
     args_struct.add_arg(
             {"-h", "--help"}, "show help message",
             ArgParserActions::STORE_TRUE);
@@ -28,7 +28,7 @@ int main(int argc, const char* argv[]) {
         return 0;
     }
     std::ostream& verbose_stream(enable_stream(not be_silent));
-    if (write_log) {
+    if (write_log) {  // not on streams, on buffers
         print_log("Start script");
     }
 
@@ -53,13 +53,16 @@ int main(int argc, const char* argv[]) {
         std::cout << "All real numbers are roots" << std::endl;
     } else {
         verbose_stream << "Number of roots: ";
-        std::cout << roots.size() << std::endl;
-        for (size_t i = 0; i < roots.size(); ++i) {
-            verbose_stream << "Root #" << i + 1 << ": ";
-            std::cout << roots[i] << std::endl;
+        std::cout << std::get<0>(roots) << std::endl;
+        if (std::get<0>(roots) >= 1) {
+            verbose_stream << "Root #1: ";
+            std::cout << std::get<1>(roots) << std::endl;
+        }
+        if (std::get<0>(roots) >= 2) {
+            verbose_stream << "Root #2: ";
+            std::cout << std::get<2>(roots) << std::endl;
         }
     }
-
     if (write_log) {
         print_log("Finished successfully");
     }

@@ -5,7 +5,7 @@
 #include "../utils.hpp"
 
 template <typename Type>
-const std::vector<Type> SE_INF_ROOTS = std::vector<Type>{0, 0, 0};
+const QERoots<Type> SE_INF_ROOTS = {3, 0, 0};
 
 //------------------------------------------
 //! Solves equation c == 0
@@ -13,12 +13,12 @@ const std::vector<Type> SE_INF_ROOTS = std::vector<Type>{0, 0, 0};
 //! @return   empty vector if c == 0 else SE_INF_ROOTS
 //------------------------------------------
 template <typename Type>
-std::vector<Type> solve_constant_equation(Type c) {
+QERoots<Type> solve_constant_equation(Type c) {
     if (compare_to_zero(c) == 0) {
         return SE_INF_ROOTS<Type>;
     }
     else {
-        return {};
+        return {0, 0, 0};
     }
 }
 
@@ -29,11 +29,11 @@ std::vector<Type> solve_constant_equation(Type c) {
 //! @return  vector of roots or SE_INF_ROOTS in case of infinite number of roots
 //------------------------------------------
 template <typename Type>
-std::vector<Type> solve_linear_equation(Type k, Type b) {
+QERoots<Type> solve_linear_equation(Type k, Type b) {
     if (compare_to_zero(k) == 0) {
         return solve_constant_equation(b);
     } else {
-        return {-b / k};
+        return {1, -b / k, 0};
     }
 }
 
@@ -45,7 +45,7 @@ std::vector<Type> solve_linear_equation(Type k, Type b) {
 //! @return  vector of increasing roots or SE_INF_ROOTS in case of infinite number of roots
 //------------------------------------------
 template <typename Type>
-std::vector<Type> solve_quadratic_equation(Type a, Type b, Type c) {
+QERoots<Type> solve_quadratic_equation(Type a, Type b, Type c) {
     if (compare_to_zero(a) == 0) {
         return solve_linear_equation(b, c);
     }
@@ -57,11 +57,11 @@ std::vector<Type> solve_quadratic_equation(Type a, Type b, Type c) {
         if (root_1 > root_2) {
             std::swap(root_1, root_2);
         }
-        return {root_1, root_2};
+        return {2, root_1, root_2};
     } else if (compare_to_zero(discriminant) == 0) {
         Type root = -b / (2 * a);
-        return {root};
+        return {1, root, 0};
     } else {
-        return {};
+        return {0, 0, 0};
     }
 }
