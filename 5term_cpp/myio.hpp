@@ -50,11 +50,11 @@ std::vector<char> read_file_to_buffer(const std::string& file_name, bool add_end
     return bytes;
 }
 
-IterCharV get_pointer_array_from_buffer(const std::vector<char>& buffer) {
+IterCharV get_pointer_array_from_buffer(const std::vector<char>& buffer, bool ignore_empty) {
     IterCharV iter_array;
     bool in_line = false;
     for (auto iter = buffer.begin(); iter != buffer.end(); ++iter) {
-        if (!in_line && *iter != '\n') {
+        if (!in_line && (*iter != '\n' || !ignore_empty)) {
             in_line = true;
             iter_array.emplace_back(static_cast<IterChar>(iter));
         }
@@ -63,6 +63,20 @@ IterCharV get_pointer_array_from_buffer(const std::vector<char>& buffer) {
         }
     }
     return iter_array;
+}
+
+
+std::vector<std::vector<char>> read_file_to_lines(const std::string& file_name, bool ignore_empty = true) {
+    auto buffer = read_file_to_buffer(file_name);
+    auto iter_array = get_pointer_array_from_buffer(buffer, ignore_empty);
+    std::vector<std::vector<char>> lines;
+    if (iter_array.size()) {
+        for (int i = 0; i < iter_array.size() - 1; ++i) {
+            lines.emplace_back(std::vector<char>(iter_array[i], iter_array[i+1]));
+        }
+        lines.emplace_back(std::vector<char>(iter_array.back(), buffer.cend()));
+    }
+    return lines;
 }
 
 void lines_from_iter_array_to_file(const IterCharV& ptr_array, const std::string& file_name) {
@@ -75,6 +89,18 @@ void lines_from_iter_array_to_file(const IterCharV& ptr_array, const std::string
         ofs << '\n';
     }
 }
+
+std::vector<uint8_t> read_bytes_from_file(const std::string& file_name) {
+    std::ifstream ifs(file_name.c_str(), std::ios::in | std::ios::binary);
+    auto size = file_size(file_name);
+    std::vector<char> chars(size);
+    std::vector<uint8_t> bytes(size);
+    ifs.read(chars.data(), size);
+    std::copy(chars.begin(), chars.end(), bytes.begin());
+    return bytes;
+}
+
+
 
 std::ostream myio_black_hole_stream(nullptr);
 
